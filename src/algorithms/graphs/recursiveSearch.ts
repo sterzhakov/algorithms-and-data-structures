@@ -1,6 +1,7 @@
 // Modules
-import Graph, { VertexKey } from './modules/Graph';
-import Queue from './modules/Queue';
+import Graph, { VertexKey } from 'src/data-structures/Graph';
+import Queue from 'src/data-structures/Queue';
+import { Storage } from './index.types';
 
 // Local types
 
@@ -41,13 +42,13 @@ export type VertexNode = {
 };
 
 export function _recursiveBFS(
-  queue: Queue<VertexNode> = new Queue(),
+  queue: Storage<VertexNode> = new Queue(),
   endVertex: VertexKey,
   graph: Graph,
   visited: VisitedVertexKeys = {},
 ) {
   if (queue.size() === 0) return null;
-  const vertexNode = queue.get()!;
+  const vertexNode = queue.pop()!;
   if (vertexNode.vertexKey === endVertex) {
     return vertexNode.routes.concat(vertexNode.vertexKey).join('->');
   } else {
@@ -55,7 +56,7 @@ export function _recursiveBFS(
     const siblings = graph.getSiblings(vertexNode.vertexKey);
     for (let i = 0; i < siblings.length; i++) {
       if (visited[siblings[i]]) continue;
-      queue.set({
+      queue.push({
         vertexKey: siblings[i],
         routes: [...vertexNode.routes, vertexNode.vertexKey]
       })
@@ -76,6 +77,6 @@ export function recursiveBFS(
   visited: VisitedVertexKeys = {},
 ): string | null {
   const queue = new Queue<VertexNode>()
-  queue.set({ vertexKey: startVertex, routes: [] })
+  queue.push({ vertexKey: startVertex, routes: [] })
   return _recursiveBFS(queue, endVertex, graph, visited);
 }

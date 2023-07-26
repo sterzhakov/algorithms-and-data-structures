@@ -1,4 +1,4 @@
-import Graph from '../modules/Graph';
+import Graph from 'src/data-structures/Graph';
 
 /*
  B <- A -> F -> G

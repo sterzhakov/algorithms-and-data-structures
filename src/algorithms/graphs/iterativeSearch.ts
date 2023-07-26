@@ -1,7 +1,8 @@
 // Modules
-import Graph, { VertexKey } from './modules/Graph';
-import Stack from './modules/Stack';
-import Queue from './modules/Queue';
+import Graph, { VertexKey } from 'src/data-structures/Graph';
+import { Storage } from './index.types';
+import Stack from 'src/data-structures/Stack';
+import Queue from 'src/data-structures/Queue';
 
 // Local types
 
@@ -9,20 +10,20 @@ export type VertexNode = { vertex: VertexKey, routes: VertexKey[] }
 export type VisitedVertexKeys = { [key: VertexKey]: true }
 
 const iterativeSearch = (
-  store: Stack<VertexNode> | Queue<VertexNode>,
+  store: Storage<VertexNode>,
   startVertex: VertexKey,
   endVertex: VertexKey,
   graph: Graph,
 ): string | null => {
   const visited: VisitedVertexKeys = {}
 
-  store.set({
+  store.push({
     vertex: startVertex,
     routes: [],
   })
 
   while (store.size() > 0) {
-    const node = store.get()!
+    const node = store.pop()!
     visited[node.vertex] = true
     if (node.vertex === endVertex) {
       return node.routes.concat(node.vertex).join("->")
@@ -30,7 +31,7 @@ const iterativeSearch = (
       const siblings = graph.getSiblings(node.vertex)
       for (let i = 0; i < siblings.length; i++) {
         if (visited[siblings[i]]) continue
-        store.set({
+        store.push({
           routes: [...node.routes, node.vertex],
           vertex: siblings[i],
         })

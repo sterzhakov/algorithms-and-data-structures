@@ -1,11 +1,11 @@
-export default class Queue<T> {
+export default class Stack<T> {
   store: T[] = []
 
-  get() {
-    return this.store.shift()
+  pop(): T | undefined {
+    return this.store.pop()
   }
 
-  set(value: T) {
+  push(value: T) {
     return this.store.push(value)
   }
 
